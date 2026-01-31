@@ -20,11 +20,12 @@ public class LoreRegistry {
         register(1100775, Event.COLLECTION); // Bushaltestelle
         register(1100900, Event.COLLECTION); // Fischerboot
         register(1100712, Event.COLLECTION); // Draisine
+        register(1101079, Event.COLLECTION); // Schneemann (Geschmolzen)
         
         // Weihnachten 2022
         register(1001368, Items.LEATHER_HORSE_ARMOR, Event.CHRISTMAS, 2022); // Teddybär
-        register(1001390, Items.LEATHER_HORSE_ARMOR, Event.CHRISTMAS, 2022); // Nikolaus Werkbank
-        register(1100250, Event.CHRISTMAS, 2022); // Schneemannhut
+        register(1001390, Items.LEATHER_HORSE_ARMOR, Event.CHRISTMAS, 2022); // Werkbank vom Nikolaus
+        register(1100250, Event.CHRISTMAS, 2022); // Sitzender Schneemann
         registerMulti(1001381, 9, Items.LEATHER_HORSE_ARMOR, Event.CHRISTMAS, 2022); // Schlitten
         registerMulti(1001374, 7, Items.LEATHER_HORSE_ARMOR, Event.CHRISTMAS_ROD, 2022); // Angel-Spielzeuge
         
@@ -48,16 +49,16 @@ public class LoreRegistry {
         
         // Halloween 2023
         register(1100269, Event.HALLOWEEN, 2023); // Medusa
-        register(1101043, Event.HALLOWEEN, 2023); // Besen
+        register(1100204, Items.LEATHER_HORSE_ARMOR, Event.HALLOWEEN, 2023); // Besen
         
         // Weihnachten 2023
         register(1100300, Event.CHRISTMAS, 2023); // Weihnachtsbaum-Hut
         register(1100278, Event.CHRISTMAS_ROD, 2023); // Wither
-        register(1100302, Event.CHRISTMAS_ROD, 2023); // Piglin Barbar
-        registerMulti(1100295, 3, Event.CHRISTMAS_ROD, 2023); // Ravager, Pillager, Blaze
+        register(1100302, Event.CHRISTMAS_ROD, 2023); // Piglin-Barbar
+        registerMulti(1100295, 3, Event.CHRISTMAS_ROD, 2023); // Verwüster, Plünderer, Lohe
         
         // Ostern 2024
-        registerMulti(1100407, 10, Event.EASTER, 2024); // Eier
+        registerMulti(1100407, 9, Event.EASTER, 2024); // Eier
         register(1100255, Event.EASTER, 2024); // Rankenhut
         register(1100463, Event.EASTER, 2024); // Häschenfigur
         
@@ -70,20 +71,20 @@ public class LoreRegistry {
         register(1100575, Event.ANNIVERSARY, 2024); // Hut
         
         // Halloween 2024
-        register(1100613, Event.HALLOWEEN, 2024);
+        register(1100613, Event.HALLOWEEN, 2024); // Schattendrachenkopf
         
         // Weihnachten 2024
-        register(1100649, Event.CHRISTMAS, 2024); // Schneekugel-Minion
+        register(1100649, Event.CHRISTMAS, 2024); // Schneekugel-Minion (Landschaft)
         register(1100680, Event.CHRISTMAS_ROD, 2024); // Schneefuchs
         register(1100287, Event.CHRISTMAS_ROD, 2024); // Warden
         register(1100679, Event.CHRISTMAS_ROD, 2024); // Pilzkuh
         
         // Valentinstag 2025
-        register(1100816, Event.VALENTINES_DAY, 2025); // type1
+        register(1100816, Event.VALENTINES_DAY, 2025); // Piglin-Statue
         
         // Ostern 2025
         register(1100853, Event.EASTER, 2025); // Sonnenblumen-Hut
-        registerMulti(1100858, 12, Event.EASTER, 2025); // Eier
+        registerMulti(1100859, 11, Event.EASTER, 2025); // Eier
         
         // Sommer 2025
         register(1100971, Event.SUMMER, 2025); // Aloha-Blumenkrone
@@ -93,11 +94,11 @@ public class LoreRegistry {
         registerMulti(1101009, 3, Event.ANNIVERSARY, 2025); // Hut, Kuchen, Ballon
         
         // Halloween 2025
-        register(1101042, Event.HALLOWEEN, 2025);
+        register(1101042, Event.HALLOWEEN, 2025); // Kürbishexenhut
         
         // Weihnachten 2025
-        register(1101076, Event.CHRISTMAS, 2025); // Schneekugel-Minion
-        registerMulti(1101097, 3, Event.CHRISTMAS_ROD, 2025); // Großwächter, Fahrender Händler, Skelettpferd
+        register(1101076, Event.CHRISTMAS, 2025); // Schneekugel-Minion (Schneemann)
+        registerMulti(1101097, 3, Event.CHRISTMAS_ROD, 2025); // Großwächter, Fahrender-Händler, Skelettpferd
     }
     
     private static void registerMulti(int startID, final int totalAmount, final Item item, final Event event, final int year) {
