@@ -1,4 +1,4 @@
-Fabric Mod für 1.21.10
+Fabric Mod für 1.21.10 / 1.21.11
 
 Beispiele:
 
