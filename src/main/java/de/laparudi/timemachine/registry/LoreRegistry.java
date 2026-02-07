@@ -99,6 +99,9 @@ public class LoreRegistry {
         // Weihnachten 2025
         register(1101076, Event.CHRISTMAS, 2025); // Schneekugel-Minion (Schneemann)
         registerMulti(1101097, 3, Event.CHRISTMAS_ROD, 2025); // Großwächter, Fahrender-Händler, Skelettpferd
+        
+        // Valentinstag 2026
+        register(1101123, Event.VALENTINES_DAY, 2026); // Balancierender-Creeper-Statue
     }
     
     private static void registerMulti(int startID, final int totalAmount, final Item item, final Event event, final int year) {
