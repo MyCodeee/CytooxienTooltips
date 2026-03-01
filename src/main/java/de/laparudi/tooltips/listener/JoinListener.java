@@ -1,6 +1,6 @@
-package de.laparudi.timemachine.listener;
+package de.laparudi.tooltips.listener;
 
-import de.laparudi.timemachine.CytooxienTimeMachine;
+import de.laparudi.tooltips.CytooxienTooltips;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.network.Connection;
 
@@ -18,12 +18,12 @@ public class JoinListener {
             final String host = inetAddress.getHostName().toLowerCase();
             
             if (host.contains("cytooxien")) {
-                CytooxienTimeMachine.CXN = true;
+                CytooxienTooltips.CXN = true;
             }
         });
         
         ClientPlayConnectionEvents.DISCONNECT.register( (listener, minecraft) -> {
-            CytooxienTimeMachine.CXN = false;
+            CytooxienTooltips.CXN = false;
         });
     }
 }

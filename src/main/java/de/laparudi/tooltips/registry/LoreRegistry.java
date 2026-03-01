@@ -1,4 +1,4 @@
-package de.laparudi.timemachine.registry;
+package de.laparudi.tooltips.registry;
 
 import java.util.HashMap;
 import java.util.Map;

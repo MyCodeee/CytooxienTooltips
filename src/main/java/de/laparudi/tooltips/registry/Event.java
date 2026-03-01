@@ -1,4 +1,4 @@
-package de.laparudi.timemachine.registry;
+package de.laparudi.tooltips.registry;
 
 import net.minecraft.network.chat.Component;
 

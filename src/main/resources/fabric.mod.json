@@ -1,22 +1,22 @@
 {
 	"schemaVersion": 1,
-	"id": "cytooxien-zeitmaschine",
+	"id": "cytooxien-tooltips",
 	"version": "${version}",
-	"name": "Cytooxien Zeitmaschine",
-	"description": "Zeitstempel für exklusive Items auf Cytooxien",
+	"name": "Cytooxien Tooltips",
+	"description": "Erweiterte Item-Beschreibungen auf Cytooxien",
 	"authors": [
 		"LapaRudi"
 	],
 	"contact": {
 		"homepage": "https://cytooxien.de/",
-		"sources": "https://github.com/LapaRudi/CytooxienZeitmaschine"
+		"sources": "https://github.com/LapaRudi/CytooxienTooltips"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/cytooxien-zeitmaschine/icon.png",
+	"icon": "assets/cytooxien-tooltips/icon.png",
 	"environment": "client",
 	"entrypoints": {
 		"client": [
-			"de.laparudi.timemachine.CytooxienTimeMachine"
+			"de.laparudi.tooltips.CytooxienTooltips"
 		]
 	},
 	"depends": {

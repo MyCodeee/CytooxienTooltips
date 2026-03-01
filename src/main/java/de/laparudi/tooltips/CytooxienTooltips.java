@@ -1,11 +1,11 @@
-package de.laparudi.timemachine;
+package de.laparudi.tooltips;
 
-import de.laparudi.timemachine.listener.ItemTooltipListener;
-import de.laparudi.timemachine.listener.JoinListener;
-import de.laparudi.timemachine.listener.KeyBindListener;
+import de.laparudi.tooltips.listener.ItemTooltipListener;
+import de.laparudi.tooltips.listener.JoinListener;
+import de.laparudi.tooltips.listener.KeyBindListener;
 import net.fabricmc.api.ClientModInitializer;
 
-public class CytooxienTimeMachine implements ClientModInitializer {
+public class CytooxienTooltips implements ClientModInitializer {
 	
 	public static boolean CXN = false;
 	public static boolean DEBUG = false;
