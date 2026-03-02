@@ -108,7 +108,7 @@ public class LoreUtils {
     }
     
     private static MutableComponent blockLevelComponent(final String block, final int level) {
-        return spriteTexture("block/" + block).append(Component.literal(" " + level));
+        return spriteTexture("block/" + block).append(Component.literal(" " + (level + 1)));
     }
     
     public static double itemStorage(final long space) {
