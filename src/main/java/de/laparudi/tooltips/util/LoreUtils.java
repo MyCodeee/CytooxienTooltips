@@ -100,7 +100,24 @@ public class LoreUtils {
         final Component component = Component.literal("~" + formatDouble(price)).withColor(0xFFFBECAB);
         return Component.literal("Kosten: ").append(component);
     }
-    
+
+    public static void formatSpawner(final List<Component> lines, final CompoundTag tag) {
+        final int remainingSpawns = tag.getInt("treasurechestitems:spawner_spawns").orElse(0);
+        final int originalSpawns = tag.getInt("treasurechestitems:spawner_original_spawns").orElse(0);
+
+        for (int i = 0; i < lines.size(); i++) {
+            final String rawText = lines.get(i).getString();
+            if (rawText.contains("Erscheinungen:")) {
+                final Component newLine = Component.literal("Erscheinungen: ")
+                        .withColor(0xFFFFFF)
+                        .withStyle(style -> style.withItalic(false))
+                        .append(Component.literal(remainingSpawns + "/" + originalSpawns).withColor(0xFEEFAD));
+                lines.set(i, newLine);
+                break;
+            }
+        }
+    }
+
     public static MutableComponent spriteTexture(final String blockOrItem) {
         return ComponentSerialization.CODEC.parse(JsonOps.INSTANCE,
                 JsonParser.parseString("{\"sprite\":\"" + blockOrItem + "\"}"))

@@ -23,9 +23,8 @@ public class ItemTooltipListener {
         ItemTooltipCallback.EVENT.register( (itemStack, context, flag, lines) -> {
             if (!CytooxienTooltips.CXN) return;
             final CustomModelData data = itemStack.get(DataComponents.CUSTOM_MODEL_DATA);
-            if (data == null || data.floats().isEmpty()) return;
 
-            final int id = data.floats().getFirst().intValue();
+            final int id = (data != null && !data.floats().isEmpty()) ? data.floats().getFirst().intValue() : -1;
             final Item item = itemStack.getItem();
             final List<Component> vanillaTooltips = flag.isAdvanced() ?
                     new ArrayList<>(lines.subList(lines.size() - 2, lines.size())) : Collections.emptyList();
@@ -35,12 +34,14 @@ public class ItemTooltipListener {
                 lines.removeLast();
             }
 
-            final Component lore = LoreRegistry.getLore(id, item);
-            if (lore != null) {
-                lines.add(Component.empty());
-                lines.add(lore);
+            if (id != -1) {
+                final Component lore = LoreRegistry.getLore(id, item);
+                if (lore != null) {
+                    lines.add(Component.empty());
+                    lines.add(lore);
+                }
             }
-            
+
             final CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
             
             customData:
@@ -55,6 +56,7 @@ public class ItemTooltipListener {
                 final long itemStorage = bukkitCompound.getLong("treasurechestitems:skyblockx.item_storage_storage").orElse(0L);
                 final long venditor = bukkitCompound.getLong("treasurechestitems:skyblockx.venditorplus_storage").orElse(0L);
                 final long turnipTimestamp = bukkitCompound.getLong("treasurechestitems:turnip_4_harvesttime").orElse(0L);
+                final String specialItem = bukkitCompound.getString("treasurechestitems:special_item").orElse("");
                 
                 if (id == 1001340 && itemStorage > 5000) {
                     lines.add(6, LoreUtils.storageFormat(itemStorage, false));
@@ -69,12 +71,16 @@ public class ItemTooltipListener {
 
                 } else if (id == 1100957 || id == 1100958 || id == 1100959) {
                     lines.addAll(LoreUtils.generatorFormat(bukkitCompound));
+
+                } else if ("spawner".equals(specialItem)) {
+                    LoreUtils.formatSpawner(lines, bukkitCompound);
                 }
-                
+
                 if (CytooxienTooltips.DEBUG) {
                     lines.add(Component.empty());
+                    String idDisplay = id == -1 ? "Keine" : String.valueOf(id);
                     lines.add(Component.literal("ModelData: ").withColor(0xFF39FF14)
-                            .append(Component.literal(String.valueOf(id)).withColor(0xFFD81E5B)));
+                            .append(Component.literal(idDisplay).withColor(0xFFD81E5B)));
                     lines.add(Component.empty());
 
                     Arrays.stream(bukkitTag.toString().split(",")).forEach(tagPart -> lines.add(Component.literal(tagPart)));
@@ -85,7 +91,8 @@ public class ItemTooltipListener {
 
             if (CytooxienTooltips.DEBUG) {
                 lines.add(Component.empty());
-                lines.add(Component.literal("ModelData: ").withColor(0xFF39FF14).append(Component.literal(String.valueOf(id)).withColor(0xFFD81E5B)));
+                String idDisplay = id == -1 ? "Keine" : String.valueOf(id);
+                lines.add(Component.literal("ModelData: ").withColor(0xFF39FF14).append(Component.literal(idDisplay).withColor(0xFFD81E5B)));
             }
 
             lines.addAll(vanillaTooltips);
