@@ -13,9 +13,10 @@ public class Generators {
     private static final Map<String, List<Double>> deepslatePrices = new HashMap<>();
     private static final Map<String, List<Double>> netherPrices = new HashMap<>();
 
-    private static final List<Double> delay = List.of(200.0, 700.0, 2300.0, 5500.0, 11000.0, 19600.0, 32000.0, 49000.0, 71400.0, 100000.0);
-    private static final List<Double> cobbleDefault = List.of(400.0, 800.0, 1200.0, 3085.0, 3825.0, 4565.0, 5300.0, 6035.0, 6765.0, 7500.0);
+    private static final List<Double> cobbleDelay = List.of(100.0, 350.0, 1200.0, 5500.0, 11000.0, 19600.0, 32000.0, 49000.0, 71400.0, 100000.0);
+    private static final List<Double> netherDeepslateDelay = List.of(200.0, 700.0, 2300.0, 5500.0, 11000.0, 19600.0, 32000.0, 49000.0, 71400.0, 100000.0);
     
+    private static final List<Double> cobbleDefault = List.of(400.0, 800.0, 1200.0, 3085.0, 3825.0, 4565.0, 5300.0, 6035.0, 6765.0, 7500.0);
     private static final List<Double> coal = List.of(200.0, 250.0, 350.0, 945.0, 1110.0, 1275.0, 1435.0, 1595.0, 1750.0, 1905.0, 2060.0, 2215.0, 2365.0, 2515.0, 2665.0, 2810.0, 2960.0, 3105.0, 3250.0, 3395.0, 3540.0, 3680.0, 3825.0, 3965.0, 4105.0, 4250.0, 4390.0, 4530.0, 4665.0, 4805.0, 4945.0, 5080.0, 5220.0, 5355.0, 5495.0, 5630.0, 5765.0, 5900.0, 6035.0, 6170.0, 6305.0, 6440.0, 6570.0, 6705.0, 6840.0, 6970.0, 7105.0, 7235.0, 7370.0, 7500.0);
     private static final List<Double> iron = List.of(250.0, 400.0, 500.0, 1315.0, 1555.0, 1780.0, 2005.0, 2215.0, 2425.0, 2630.0, 2830.0, 3030.0, 3220.0, 3415.0, 3600.0, 3785.0, 3970.0, 4150.0, 4330.0, 4505.0, 4685.0, 4855.0, 5030.0, 5200.0, 5370.0, 5535.0, 5705.0, 5870.0, 6035.0, 6195.0, 6360.0, 6520.0, 6680.0, 6840.0, 6995.0, 7155.0, 7310.0, 7465.0, 7620.0, 7775.0, 7925.0, 8080.0, 8230.0, 8380.0, 8530.0, 8680.0, 8830.0, 8980.0, 9125.0, 9275.0, 9420.0, 9565.0, 9710.0, 9855.0, 10000.0);
     private static final List<Double> lapis = List.of(600.0, 800.0, 1000.0, 2390.0, 2700.0, 2980.0, 3245.0, 3495.0, 3735.0, 3960.0, 4180.0, 4390.0, 4595.0, 4795.0, 4985.0, 5170.0, 5355.0, 5530.0, 5705.0, 5875.0, 6045.0, 6210.0, 6370.0, 6525.0, 6685.0, 6835.0, 6985.0, 7135.0, 7280.0, 7425.0, 7570.0, 7710.0, 7850.0, 7985.0, 8120.0, 8255.0, 8390.0, 8520.0, 8650.0, 8780.0, 8905.0, 9030.0, 9155.0, 9280.0, 9405.0, 9525.0, 9645.0, 9765.0, 9885.0, 10000.0);
@@ -78,7 +79,7 @@ public class Generators {
     
     private static double getBlockPrice(final String type, final String block, final int level) {
         final Map<String, List<Double>> map = switch (type) {
-            case "cobble" -> cobblePrices;
+            case "default" -> cobblePrices;
             case "deepslate" -> deepslatePrices;
             case "nether" -> netherPrices;
             default -> null;
@@ -88,8 +89,9 @@ public class Generators {
         return map.get(block).stream().limit(level).mapToDouble(Double::doubleValue).sum();
     }
     
-    private static double getDelayPrice(final int level) {
-        return delay.stream().limit(level).mapToDouble(Double::doubleValue).sum();
+    private static double getDelayPrice(final boolean cobble, final int level) {
+        final List<Double> list = cobble ? cobbleDelay : netherDeepslateDelay;
+        return list.stream().limit(level).mapToDouble(Double::doubleValue).sum();
     }
     
     public static String generatorType(final CompoundTag tag) {
@@ -109,9 +111,10 @@ public class Generators {
         final CompoundTag levelsTag = tag.getCompound("treasurechestitems:cobblegenerator_levels").orElse(null);
         if (type == null || levelsTag == null) return 0.0;
         
-        final int delay = tag.getInt("treasurechestitems:cobblegenerator_baselevel").orElse(0);
+        final int delayLevel = tag.getInt("treasurechestitems:cobblegenerator_baselevel").orElse(0);
+        final double delayPrice = getDelayPrice(type.equals("default"), delayLevel);
         final List<Pair<String, Integer>> levels = levelsTag.keySet().stream().map(key -> Pair.of(key, levelsTag.getIntOr(key, 0))).toList();
-        return getDelayPrice(delay) + levels.stream().mapToDouble(pair -> getBlockPrice(type, pair.key(), pair.value())).sum();
+        return delayPrice + levels.stream().mapToDouble(pair -> getBlockPrice(type, pair.key(), pair.value())).sum();
     }
     
     public static long generatorBlocks(final CompoundTag tag) {
