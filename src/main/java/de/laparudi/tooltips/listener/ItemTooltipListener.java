@@ -73,7 +73,12 @@ public class ItemTooltipListener {
                 } else if ( (id >= 1100979 && id <= 1100988) || (id >= 1100998 && id <= 1101002) ) {
                     final int line = LoreUtils.turnipLoreSize(bukkitCompound);
                     final List<Component> list = LoreUtils.turnipFormat(turnipTimestamp);
-                    lines.addAll(line, list);
+                    
+                    try {
+                        lines.addAll(line, list);
+                    } catch (final IndexOutOfBoundsException exception) {
+                        lines.addAll(list);
+                    }
 
                 } else if (id == 1100957 || id == 1100958 || id == 1100959) {
                     lines.addAll(emptyGeneratorLine, LoreUtils.generatorFormat(bukkitCompound));
