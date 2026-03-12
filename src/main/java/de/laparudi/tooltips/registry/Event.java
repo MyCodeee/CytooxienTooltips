@@ -1,6 +1,8 @@
 package de.laparudi.tooltips.registry;
 
+import de.laparudi.tooltips.util.LoreUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public enum Event {
 
@@ -37,11 +39,16 @@ public enum Event {
     }
 
     public Component getText() {
-        return Component.literal(this.getName()).withColor(this.getColor());
+        return LoreUtils.formatCustomTag(this.getName(), false)
+                .withColor(this.getColor());
     }
-    
+
     public Component getText(final int year) {
-        return Component.literal(this.getName()).withColor(this.getColor())
-                .append(Component.literal(" " + year).withColor(this.getSecondColor()));
+        MutableComponent nameTag = LoreUtils.formatCustomTag(this.getName(), false)
+                .withColor(this.getColor());
+        MutableComponent yearTag = LoreUtils.formatCustomTag(String.valueOf(year), true)
+                .withColor(this.getSecondColor());
+
+        return nameTag.append(Component.literal(" ")).append(yearTag);
     }
 }
