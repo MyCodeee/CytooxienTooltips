@@ -1,8 +1,8 @@
 **Zeitstempel für exklusive Items:**
 <br>
-<img width="314" height="152" alt="image" src="https://github.com/user-attachments/assets/f310bc22-7cc3-4206-bea8-497c8896ca5f" />
-<img width="283" height="154" alt="image" src="https://github.com/user-attachments/assets/9a306872-7e71-4796-a65b-43509a2567fd" />
-<img width="344" height="241" alt="image" src="https://github.com/user-attachments/assets/84467e55-f7db-48c1-b349-21a614337e68" />
+<img width="539" height="183" alt="image" src="https://github.com/user-attachments/assets/701d77ef-bb6b-4208-b94c-a10ef92421e4" />
+<img width="434" height="102" alt="image" src="https://github.com/user-attachments/assets/ca6703a8-f814-4405-a1a5-6e32af1990d3" />
+<img width="520" height="89" alt="image" src="https://github.com/user-attachments/assets/425d2edd-3b5d-4f02-bbd8-1e750d994d56" />
 <br>
 <br>
 <br>
