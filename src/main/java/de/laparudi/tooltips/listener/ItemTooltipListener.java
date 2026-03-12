@@ -8,7 +8,9 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.CustomModelData;
 
@@ -39,8 +41,9 @@ public class ItemTooltipListener {
             if (id != -1) {
                 final Component lore = LoreRegistry.getLore(id, item);
                 if (lore != null) {
-                    lines.add(Component.empty());
-                    lines.add(lore);
+                    final int exclusiveLine = isRegistered(itemStack) ? 2 : 1;
+                    final MutableComponent current = lines.get(exclusiveLine).copy();
+                    lines.set(exclusiveLine, current.append(Component.literal(" ")).append(lore));
                 }
             }
 
@@ -106,5 +109,19 @@ public class ItemTooltipListener {
 
             lines.addAll(vanillaTooltips);
         });
+    }
+    
+    private static boolean isRegistered(final ItemStack item) {
+        final CustomData data = item.get(DataComponents.CUSTOM_DATA);
+        if (data == null) return false;
+
+        final CompoundTag tag = data.copyTag();
+        final Tag bukkitTag = tag.get("PublicBukkitValues");
+        if (bukkitTag == null) return false;
+
+        final CompoundTag bukkitCompound = bukkitTag.asCompound().orElse(null);
+        if (bukkitCompound == null) return false;
+        
+        return bukkitCompound.getBoolean("treasurechestitems:modelblock_registered").orElse(false);
     }
 }

@@ -37,17 +37,14 @@ public enum Event {
     public int getSecondColor() {
         return secondColor;
     }
-
+    
     public Component getText() {
-        return LoreUtils.formatCustomTag(this.getName(), false)
-                .withColor(this.getColor());
+        return LoreUtils.formatCustomTag(this.getName(), false).withColor(this.getColor());
     }
 
     public Component getText(final int year) {
-        MutableComponent nameTag = LoreUtils.formatCustomTag(this.getName(), false)
-                .withColor(this.getColor());
-        MutableComponent yearTag = LoreUtils.formatCustomTag(String.valueOf(year), true)
-                .withColor(this.getSecondColor());
+        MutableComponent nameTag = LoreUtils.formatCustomTag(this.getName(), false).withColor(this.getColor());
+        MutableComponent yearTag = LoreUtils.formatCustomTag(String.valueOf(year), true).withColor(this.getSecondColor());
 
         return nameTag.append(Component.literal(" ")).append(yearTag);
     }

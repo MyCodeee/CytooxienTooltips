@@ -136,23 +136,6 @@ public class LoreUtils {
         return Component.literal("Kosten: ").append(component);
     }
 
-    public static void formatSpawnerAlternative(final List<Component> lines, final CompoundTag tag) {
-        final int remainingSpawns = tag.getInt("treasurechestitems:spawner_spawns").orElse(0);
-        final int originalSpawns = tag.getInt("treasurechestitems:spawner_original_spawns").orElse(0);
-        int nl = 0;
-        for (int i = 0; i < lines.size(); i++) {
-            final String rawText = lines.get(i).getString();
-            if (rawText.isEmpty()) {
-                nl++;
-                if (nl == 2) {
-                    final Component newLine = Component.literal("Erscheinungen: ").withColor(0xFFFFFF).withStyle(style -> style.withItalic(false)).append(Component.literal(remainingSpawns + "/" + originalSpawns).withColor(0xFEEFAD));
-                    lines.set((i + 1), newLine);
-                    break;
-                }
-            }
-        }
-    }
-
     public static Component formatSpawner(final CompoundTag tag) {
         final int remainingSpawns = tag.getInt("treasurechestitems:spawner_spawns").orElse(0);
         final int originalSpawns = tag.getInt("treasurechestitems:spawner_original_spawns").orElse(0);
