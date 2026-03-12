@@ -91,7 +91,7 @@ public class ItemTooltipListener {
                     lines.set(emptySpawnerLine, LoreUtils.formatSpawner(bukkitCompound));
 
                 } else if (specialItem.equals("watering_can") || specialItem.equals("golden_watering_can")) {
-                    if (bukkitCompound.getInt("treasurechestitems:watering_can_wateruses").orElse(0) != 0) {
+                    if (bukkitCompound.getInt("treasurechestitems:" + specialItem + "_wateruses").orElse(0) != 0) {
                         if (!flag.isAdvanced()) {
                             lines.add(emptyWateringCanLine, LoreUtils.formatWateringCan(bukkitCompound));
                         }
