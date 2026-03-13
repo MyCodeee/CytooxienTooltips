@@ -116,6 +116,7 @@ public class LoreUtils {
     }
 
     public static int turnipLoreSize(final CompoundTag tag) {
+        if (tag.getLong("treasurechestitems:turnip_4_harvesttime").orElse(0L) == 0L) return -1; 
         int size = 6;
 
         if (tag.getDouble("treasurechestitems:turnip_4_weight").orElse(0.0) > 1) size += 3;
@@ -144,11 +145,9 @@ public class LoreUtils {
                 .append(Component.literal(remainingSpawns + "/" + originalSpawns).withColor(0xFEEFAD));
     }
 
-    public static Component formatWateringCan(final CompoundTag tag) {
-        final int uses = tag.getInt("treasurechestitems:watering_can_wateruses").orElse(0);
-
+    public static Component formatWateringCan(final int durability) {
         return Component.literal("Haltbarkeit: ")
-                .append(Component.literal(Integer.toString(uses)).withColor(0xFEEFAD));
+                .append(Component.literal(Integer.toString(durability)).withColor(0xFEEFAD));
     }
 
     /*

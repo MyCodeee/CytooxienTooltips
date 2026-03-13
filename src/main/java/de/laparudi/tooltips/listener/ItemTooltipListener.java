@@ -77,6 +77,7 @@ public class ItemTooltipListener {
                 } else if ( (id >= 1100979 && id <= 1100988) || (id >= 1100998 && id <= 1101002) ) {
                     final int line = LoreUtils.turnipLoreSize(bukkitCompound);
                     final List<Component> list = LoreUtils.turnipFormat(turnipTimestamp);
+                    if (line == -1) break customData;
                     
                     try {
                         lines.addAll(line, list);
@@ -91,10 +92,10 @@ public class ItemTooltipListener {
                     lines.set(emptySpawnerLine, LoreUtils.formatSpawner(bukkitCompound));
 
                 } else if (specialItem.equals("watering_can") || specialItem.equals("golden_watering_can")) {
-                    if (bukkitCompound.getInt("treasurechestitems:" + specialItem + "_wateruses").orElse(0) != 0) {
-                        if (!flag.isAdvanced()) {
-                            lines.add(emptyWateringCanLine, LoreUtils.formatWateringCan(bukkitCompound));
-                        }
+                    final int durability = bukkitCompound.getInt("treasurechestitems:" + specialItem + "_wateruses").orElse(0);
+                    
+                    if (durability != 0 && !flag.isAdvanced()) {
+                        lines.add(emptyWateringCanLine, LoreUtils.formatWateringCan(durability));
                     }
                 }
 
