@@ -34,3 +34,10 @@
 **Genaue verbleibende Spawn-Anzahl von Spawnern:**<br>
 <br>
 <img width="488" height="245" alt="image" src="https://github.com/user-attachments/assets/4c710dcf-6f18-42fc-a58b-e71755a63b86" />
+<br>
+<br>
+<br>
+<br>
+**Zusätzliche Angaben bei Angelpokalen:**<br>
+<br>
+<img width="456" height="365" alt="image" src="https://github.com/user-attachments/assets/6610b82d-f57f-47aa-b39a-6b80a0c9921c" />
