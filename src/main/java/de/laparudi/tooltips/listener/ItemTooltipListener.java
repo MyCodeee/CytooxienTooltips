@@ -40,7 +40,7 @@ public class ItemTooltipListener {
 
             if (id != -1) {
                 final Component lore = LoreRegistry.getLore(id, item);
-                if (lore != null) {
+                if (lore != null && lines.size() > 1) {
                     final int exclusiveLine = isRegistered(itemStack) ? 2 : 1;
                     final MutableComponent current = lines.get(exclusiveLine).copy();
                     lines.set(exclusiveLine, current.append(Component.literal(" ")).append(lore));
