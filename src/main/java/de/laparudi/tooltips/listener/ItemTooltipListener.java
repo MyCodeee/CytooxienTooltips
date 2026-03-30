@@ -1,7 +1,8 @@
 package de.laparudi.tooltips.listener;
 
 import de.laparudi.tooltips.CytooxienTooltips;
-import de.laparudi.tooltips.registry.LoreRegistry;
+import de.laparudi.tooltips.Language;
+import de.laparudi.tooltips.exclusive.Registry;
 import de.laparudi.tooltips.util.LoreUtils;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.core.component.DataComponents;
@@ -23,11 +24,11 @@ public class ItemTooltipListener {
     
     public static void register() {
         ItemTooltipCallback.EVENT.register( (itemStack, context, flag, lines) -> {
-            if (!CytooxienTooltips.CXN) return;
+            if (!CytooxienTooltips.cxn) return;
             final CustomModelData data = itemStack.get(DataComponents.CUSTOM_MODEL_DATA);
 
             final int id = (data != null && !data.floats().isEmpty()) ? data.floats().getFirst().intValue() : -1;
-            final String idDisplay = id == -1 ? "Keine" : String.valueOf(id);
+            final String idDisplay = id == -1 ? Language.get("model_data.none") : String.valueOf(id);
             
             final Item item = itemStack.getItem();
             final List<Component> vanillaTooltips = flag.isAdvanced() ?
@@ -39,7 +40,7 @@ public class ItemTooltipListener {
             }
 
             if (id != -1) {
-                final Component lore = LoreRegistry.getLore(id, item);
+                final Component lore = Registry.getLore(id, item);
                 if (lore != null && lines.size() > 1) {
                     final int exclusiveLine = isRegistered(itemStack) ? 2 : 1;
                     final MutableComponent current = lines.get(exclusiveLine).copy();
@@ -62,13 +63,13 @@ public class ItemTooltipListener {
                 final long venditor = bukkitCompound.getLong("treasurechestitems:skyblockx.venditorplus_storage").orElse(0L);
                 final long turnipTimestamp = bukkitCompound.getLong("treasurechestitems:turnip_4_harvesttime").orElse(0L);
                 final String specialItem = bukkitCompound.getString("treasurechestitems:special_item").orElse("");
+
+                // Spawner, Watering Can, Fishing Trophy
+                final int defaultEmptyLine = LoreUtils.findEmptyLine(lines, 2) +1;
                 
                 final int emptyStorageLine = LoreUtils.findEmptyLine(lines, 3);
                 final int emptyGeneratorLine = LoreUtils.findEmptyLine(lines, 2);
-                final int emptySpawnerLine = LoreUtils.findEmptyLine(lines, 2) +1;
-                final int emptyWateringCanLine = LoreUtils.findEmptyLine(lines, 2) +1;
-                final int emptyformatFishingTrophyLine = LoreUtils.findEmptyLine(lines, 2) +1;
-
+                
                 if (id == 1001340 && itemStorage > 5000) {
                     lines.add(emptyStorageLine, LoreUtils.storageFormat(itemStorage, false));
                 
@@ -90,25 +91,31 @@ public class ItemTooltipListener {
                     lines.addAll(emptyGeneratorLine, LoreUtils.generatorFormat(bukkitCompound));
 
                 } else if (specialItem.equals("spawner")) {
-                    lines.set(emptySpawnerLine, LoreUtils.formatSpawner(bukkitCompound));
+                    lines.set(defaultEmptyLine, LoreUtils.formatSpawner(bukkitCompound));
 
                 } else if (specialItem.equals("watering_can") || specialItem.equals("golden_watering_can")) {
                     final int durability = bukkitCompound.getInt("treasurechestitems:" + specialItem + "_wateruses").orElse(0);
+                    final Component formatted = LoreUtils.formatWateringCan(durability);
+                    final int line = specialItem.startsWith("golden") ? defaultEmptyLine -1 : defaultEmptyLine;
                     
                     if (durability != 0 && !flag.isAdvanced()) {
-                        lines.add(emptyWateringCanLine, LoreUtils.formatWateringCan(durability));
+                        if (Language.getCurrent().equals("nl_nl")) {
+                            lines.addAll(defaultEmptyLine -1, List.of(Component.empty(), formatted));
+                            
+                        } else {
+                            lines.add(line, formatted);
+                        }
                     }
 
                 } else if (specialItem.equals("fishing.fishing_cup_big_fish")) {
-                    lines.remove(emptyformatFishingTrophyLine + 1);
-                    lines.remove(emptyformatFishingTrophyLine);
-                    lines.addAll(emptyformatFishingTrophyLine, LoreUtils.formatFishingTrophy(bukkitCompound));
-
+                    lines.remove(defaultEmptyLine + 1);
+                    lines.remove(defaultEmptyLine);
+                    lines.addAll(defaultEmptyLine, LoreUtils.formatFishingTrophy(bukkitCompound));
                 }
 
-                if (CytooxienTooltips.DEBUG) {
+                if (CytooxienTooltips.debug) {
                     lines.add(Component.empty());
-                    lines.add(Component.literal("ModelData: ").withColor(0xFF39FF14)
+                    lines.add(Component.literal(Language.get("model_data.name") + ": ").withColor(0xFF39FF14)
                             .append(Component.literal(idDisplay).withColor(0xFFD81E5B)));
                     lines.add(Component.empty());
 
@@ -118,9 +125,9 @@ public class ItemTooltipListener {
                 }
             }
 
-            if (CytooxienTooltips.DEBUG) {
+            if (CytooxienTooltips.debug) {
                 lines.add(Component.empty());
-                lines.add(Component.literal("ModelData: ").withColor(0xFF39FF14).append(Component.literal(idDisplay).withColor(0xFFD81E5B)));
+                lines.add(Component.literal(Language.get("model_data.name") + ": ").withColor(0xFF39FF14).append(Component.literal(idDisplay).withColor(0xFFD81E5B)));
             }
 
             lines.addAll(vanillaTooltips);

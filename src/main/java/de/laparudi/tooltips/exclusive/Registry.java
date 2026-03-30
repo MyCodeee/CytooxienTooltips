@@ -1,4 +1,4 @@
-package de.laparudi.tooltips.registry;
+package de.laparudi.tooltips.exclusive;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,11 +8,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
-public class LoreRegistry {
+public class Registry {
     
     private static final Map<Pair<Integer, Item>, Component> items = new HashMap<>();
 
-    static {
+    public static void load() {
+        items.clear();
+        
         // Collection
         registerMulti(1100685, 5, Event.COLLECTION); // Goldene Plüschis
         registerMulti(1100690, 5, Event.COLLECTION); // Adventskranz
@@ -102,6 +104,10 @@ public class LoreRegistry {
         
         // Valentinstag 2026
         register(1101123, Event.VALENTINES_DAY, 2026); // Balancierender-Creeper-Statue
+        
+        // Ostern 2026
+        registerMulti(1101154, 10, Event.EASTER, 2026); // Eier
+        register(1101166, Event.EASTER, 2026); // Löwenzahnhut
     }
     
     private static void registerMulti(int startID, final int totalAmount, final Item item, final Event event, final int year) {
@@ -113,12 +119,6 @@ public class LoreRegistry {
     private static void registerMulti(int startID, final int totalAmount, final Event event, final int year) {
         for (int i = 0; i < totalAmount; i++) {
             register(startID++, Items.FIREWORK_STAR, event, year);
-        }
-    }
-
-    private static void registerMulti(int startID, final int totalAmount, final Item item, final Event event) {
-        for (int i = 0; i < totalAmount; i++) {
-            register(startID++, item, event);
         }
     }
 

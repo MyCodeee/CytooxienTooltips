@@ -1,0 +1,44 @@
+{
+  "unit.hour": "Час",
+  "unit.hours": "Часы",
+  "unit.day": "День",
+  "unit.days": "Дни",
+  
+  "model_data.none": "Нет",
+  "model_data.name": "Данные модели",
+  "upgrade.costs": "Стоимость улучшения",
+  "generator.broken_blocks": "Добытые блоки",
+  "spawner.spawns": "Спавны",
+
+  "turnip.age": "Возраст",
+  "turnip.harvested": "Собрано",
+  "turnip.can.durability": "Прочность",
+
+  "fishing_trophy.winner": "Победитель",
+  "fishing_trophy.date": "Дата",
+  "fishing_trophy.fish": "Рыба",
+  "fishing_trophy.points": "Очки",
+
+  "fish.gold_fish": "Золотая рыбка",
+  "fish.sweetfish": "Аю",
+  "fish.anchovy": "Анчоус",
+  "fish.guppy": "Гуппи",
+  "fish.olive_flounder": "Камбала",
+  "fish.sea_bass": "Морской окунь",
+  "fish.red_snapper": "Красный луциан",
+  "fish.tuna": "Тунец",
+  "fish.surgeon_fish": "Хирург",
+  "fish.piranha_fish": "Пиранья",
+  "fish.nibble_fish": "Гарра",
+  "fish.jellyfish": "Медуза",
+  "fish.blob_fish": "Капля",
+  "fish.ray": "Скат",
+  "fish.electric_eel": "Электрический угорь",
+  "fish.ocean_sun_fish": "Молa-мола",
+  "fish.sea_horse": "Морской конёк",
+  "fish.napoleonfish": "Наполеон",
+
+  "debug.display": "Режим отладки",
+  "debug.on": "ВКЛ",
+  "debug.off": "ВЫКЛ"
+}

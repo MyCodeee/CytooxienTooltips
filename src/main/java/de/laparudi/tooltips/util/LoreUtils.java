@@ -3,6 +3,7 @@ package de.laparudi.tooltips.util;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
+import de.laparudi.tooltips.Language;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -12,75 +13,73 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.Instant;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.IntStream;
 
 public class LoreUtils {
-
-    private static String formatTimestamp(final long timestamp) {
-        final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        return format.format(new Date(timestamp));
+    
+    private static String formatTimestamp(long timestamp) {
+        final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT);
+        final ZonedDateTime dateTime = Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault());
+        
+        String formatted = dateTime.format(formatter.withLocale(Language.getLocale()));
+        if (Language.getCurrent().equals("de_cx")) formatted += " n. Chr.";
+        return formatted;
     }
-
+    
     private static String formatTimeDifference(final long timestamp) {
         final long difference = Instant.now().toEpochMilli() - timestamp;
         final long oneHour = Duration.ofHours(1).toMillis();
-        if (difference < oneHour) return "< 1 Stunde";
+        if (difference < oneHour) return "< 1 " + Language.get("unit.hour");
 
         final long totalHours = difference / oneHour;
         final long days = totalHours / 24;
         final long hours = totalHours % 24;
 
-        final String dayDisplay = days == 0 ? "" : (days == 1 ? "1 Tag " : days + " Tage ");
-        final String hourDisplay = hours == 0 ? "" : (hours == 1 ? "1 Stunde" : hours + " Stunden");
+        final String dayDisplay = days == 0 ? "" : (days == 1 ? "1 " + Language.get("unit.day") + " " : days + " " + Language.get("unit.days") + " ");
+        final String hourDisplay = hours == 0 ? "" : (hours == 1 ? "1 " + Language.get("unit.hour") : hours + " " + Language.get("unit.hours"));
 
         return (dayDisplay + hourDisplay).trim();
     }
 
     private static String formatDouble(final double input) {
-        final NumberFormat format = NumberFormat.getNumberInstance(Locale.GERMANY);
+        final NumberFormat format = NumberFormat.getNumberInstance(Language.getLocale());
         format.setMinimumFractionDigits(2);
         format.setMaximumFractionDigits(2);
         return format.format(input);
     }
 
     private static String formatLong(final long input) {
-        final NumberFormat format = NumberFormat.getNumberInstance(Locale.GERMANY);
+        final NumberFormat format = NumberFormat.getNumberInstance(Language.getLocale());
         return format.format(input);
     }
 
-    public static MutableComponent formatCustomTag(String input, boolean isNumeric) {
+    public static MutableComponent formatCustomTag(final String input, final boolean isNumeric) {
         if (input == null || input.isEmpty()) return Component.empty();
+        final String upperInput = input.toUpperCase(Language.getLocale());
 
-        String upperInput = input.toUpperCase(java.util.Locale.ROOT);
+        final ResourceLocation textLoc = ResourceLocation.parse(isNumeric ? "cytooxien-tooltips:small_numbers" : "minecraft:small");
+        final ResourceLocation bgLoc = ResourceLocation.parse("minecraft:tag");
+        final FontDescription textFont = new FontDescription.Resource(textLoc);
+        final FontDescription bgFont = new FontDescription.Resource(bgLoc);
 
-        ResourceLocation textLoc = ResourceLocation.parse(isNumeric ? "cytooxien-tooltips:small_numbers" : "minecraft:small");
-        ResourceLocation bgLoc = ResourceLocation.parse("minecraft:tag");
-        FontDescription textFont = new FontDescription.Resource(textLoc);
-        FontDescription bgFont = new FontDescription.Resource(bgLoc);
-
-        StringBuilder bgBuilder = new StringBuilder();
-        int length = upperInput.length();
-
-        char lengthChar = (char) (0xE200 + (length - 1));
+        final StringBuilder bgBuilder = new StringBuilder();
+        final int length = upperInput.length();
+        
+        final char lengthChar = (char) (0xE200 + (length - 1));
         bgBuilder.append(lengthChar);
         bgBuilder.append("\uE211");
+        bgBuilder.append("\uE212".repeat(length));
 
-        for (int i = 0; i < length; i++) {
-            bgBuilder.append("\uE212");
-        }
-
-        StringBuilder fgBuilder = new StringBuilder();
+        final StringBuilder fgBuilder = new StringBuilder();
         for (char c : upperInput.toCharArray()) {
             fgBuilder.append(c).append("\uE210");
         }
-
+        
         return Component.literal(bgBuilder.toString())
                 .withStyle(style -> style.withFont(bgFont).withShadowColor(0))
                 .append(Component.literal(fgBuilder.toString())
@@ -101,7 +100,10 @@ public class LoreUtils {
             final int soulSandLevel = Generators.blockLevel(tag, "soul_sand");
             final int glowstoneLevel = Generators.blockLevel(tag, "glowstone");
 
-            lore.add(Component.literal(" ").append(blockLevelComponent("soul_soil", soulSoilLevel)).append(split).append(blockLevelComponent("soul_sand", soulSandLevel)).append(split).append(blockLevelComponent("glowstone", glowstoneLevel)));
+            lore.add(Component.literal(" ")
+                    .append(blockLevelComponent("soul_soil", soulSoilLevel)).append(split)
+                    .append(blockLevelComponent("soul_sand", soulSandLevel)).append(split)
+                    .append(blockLevelComponent("glowstone", glowstoneLevel)));
         }
 
         final double price = Generators.generatorPrice(tag);
@@ -111,7 +113,11 @@ public class LoreUtils {
         final Component priceComponent = Component.literal(formatDouble(price)).withColor(0xFFFBECAB);
         final Component blocksComponent = Component.literal(formatLong(blocks)).withColor(0xFFFBECAB);
 
-        lore.addAll(List.of(Component.empty(), Component.literal("Upgrade-Kosten: ").append(priceComponent), Component.literal("Abgebaute Blöcke: ").append(blocksComponent)));
+        lore.addAll(List.of(
+                Component.empty(),
+                Component.literal(Language.get("upgrade.costs") + ": ").append(priceComponent),
+                Component.literal(Language.get("generator.broken_blocks") + ": ").append(blocksComponent))
+        );
 
         return lore;
     }
@@ -129,50 +135,31 @@ public class LoreUtils {
     public static List<Component> turnipFormat(final long timestamp) {
         final Component date = Component.literal(formatTimestamp(timestamp)).withColor(0xFFFBECAB);
         final Component age = Component.literal(formatTimeDifference(timestamp)).withColor(0xFFFBECAB);
-        return List.of(Component.empty(), Component.literal("Geerntet: ").append(date), Component.literal("Alter: ").append(age));
+        
+        return List.of(
+                Component.empty(),
+                Component.literal(Language.get("turnip.harvested") + ": ").append(date),
+                Component.literal(Language.get("turnip.age") + ": ").append(age)
+        );
     }
 
     public static Component storageFormat(final long space, final boolean venditor) {
         final double price = venditor ? venditor(space) : itemStorage(space);
         final Component component = Component.literal("~" + formatDouble(price)).withColor(0xFFFBECAB);
-        return Component.literal("Kosten: ").append(component);
+        return Component.literal(Language.get("upgrade.costs") + ": ").append(component);
     }
 
     public static Component formatSpawner(final CompoundTag tag) {
         final int remainingSpawns = tag.getInt("treasurechestitems:spawner_spawns").orElse(0);
         final int originalSpawns = tag.getInt("treasurechestitems:spawner_original_spawns").orElse(0);
 
-        return Component.literal("Erscheinungen: ")
+        return Component.literal(Language.get("spawner.spawns") + ": ")
                 .append(Component.literal(remainingSpawns + "/" + originalSpawns).withColor(0xFEEFAD));
     }
 
     public static Component formatWateringCan(final int durability) {
-        return Component.literal("Haltbarkeit: ")
+        return Component.literal(Language.get("turnip.can.durability") + ": ")
                 .append(Component.literal(Integer.toString(durability)).withColor(0xFEEFAD));
-    }
-
-    private static String translateFish(final String input) {
-        return switch (input) {
-            case "gold_fish" -> "Goldfisch";
-            case "sweetfish" -> "Ayu";
-            case "anchovy" -> "Sardelle";
-            case "guppy" -> "Guppy";
-            case "olive_flounder" -> "Olivenflunder";
-            case "sea_bass" -> "Seebarsch";
-            case "red_snapper" -> "Roter Schnapper";
-            case "tuna" -> "Thunfisch";
-            case "surgeon_fish" -> "Doktorfisch";
-            case "piranha_fish" -> "Piranha";
-            case "nibble_fish" -> "Saugbarbe";
-            case "jellyfish" -> "Qualle";
-            case "blob_fish" -> "Blobfisch";
-            case "ray" -> "Rochen";
-            case "electric_eel" -> "Zitteraal";
-            case "ocean_sun_fish" -> "Mondfisch";
-            case "sea_horse" -> "Seepferdchen";
-            case "napoleonfish" -> "Napoleonfisch";
-            default -> input;
-        };
     }
     
     public static List<Component> formatFishingTrophy(final CompoundTag tag) {
@@ -185,26 +172,21 @@ public class LoreUtils {
         int playerColor = 0xFF9BA3AC;
 
         if (!winnerJson.isEmpty()) {
-            try {
-                JsonObject obj = JsonParser.parseString(winnerJson).getAsJsonObject();
-                player = obj.get("text").getAsString();
-                if (obj.has("color")) {
-                    playerColor = Integer.parseInt(obj.get("color").getAsString().replace("#", ""), 16);
-                }
-            } catch (Exception ignored) {}
+            final JsonObject obj = JsonParser.parseString(winnerJson).getAsJsonObject();
+            player = obj.get("text").getAsString();
+            
+            if (obj.has("color")) {
+                playerColor = Integer.parseInt(obj.get("color").getAsString().replace("#", ""), 16);
+            }
         }
         
-        return List.of(formatCustomTag("Details", false).withColor(0xFF3272D3),
-                Component.literal(" ● Gewinner: ").append(Component.literal(player).withColor(playerColor)),
-                Component.literal(" ● Datum: ").append(Component.literal(formatTimestamp(date)).withColor(0xFFFBECAB)),
-                Component.literal(" ● Fisch: ").append(Component.literal(translateFish(fish)).withColor(0xFFFBECAB)),
-                Component.literal(" ● Punkte: ").append(Component.literal(String.valueOf(points)).withColor(0xFFFBECAB)));
+        return List.of(formatCustomTag(Language.get("tag.details"), false).withColor(0xFF3272D3),
+                Component.literal(" ● " + Language.get("fishing_trophy.winner") + ": ").append(Component.literal(player).withColor(playerColor)),
+                Component.literal(" ● " + Language.get("fishing_trophy.date") + ": ").append(Component.literal(formatTimestamp(date)).withColor(0xFFFBECAB)),
+                Component.literal(" ● " + Language.get("fishing_trophy.fish") + ": ").append(Component.literal(Language.get("fish." + fish)).withColor(0xFFFBECAB)),
+                Component.literal(" ● " + Language.get("fishing_trophy.points") + ": ").append(Component.literal(String.valueOf(points)).withColor(0xFFFBECAB)));
     }
-
-    /*
-    Sucht nach der angegebenen leeren Zeile um dort die Lore einzufügen (z.B.für das Auktionshaus)
-    Falls die Zeile nicht existiert wird die Lore einfach unten rangehängt.
-     */
+    
     public static int findEmptyLine(final List<Component> lore, final int emptyLines) {
         final int search = IntStream.range(0, lore.size())
                 .filter(line -> lore.get(line).getString().isBlank())
