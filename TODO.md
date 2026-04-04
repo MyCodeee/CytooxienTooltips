@@ -11,9 +11,9 @@
 - [ ] Lists
 - [ ] Cards (WIP)
 - [X] Item Renderer
-- [ ] Entity Renderer
-- [ ] Recipe Renderer
+- [ ] Entity Renderer (Low priority)
+- [ ] Recipe Renderer (Low priority)
 - [X] Image Renderer
 - [X] Gif Renderer (for the blog)
-- [ ] Links (for pages in the Wiki)
+- [X] Links (for pages in the Wiki)
 - [ ] Language Support
