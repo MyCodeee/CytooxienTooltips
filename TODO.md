@@ -17,3 +17,4 @@
 - [X] Gif Renderer (for the blog)
 - [X] Links (for pages in the Wiki)
 - [ ] Language Support
+- [ ] Tooltip Hover
